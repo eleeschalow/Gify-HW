@@ -1,0 +1,115 @@
+<!DOCTYPE HTML> 
+
+<head>
+  <meta charset="UTF-8">
+  <title> Nintendo All Star Gifs!</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+  <!-- Rendered buttons will get dumped Here  -->
+  <div id= "Nintendobuttons-view">
+
+  </div>
+  <form id="Nintendo-form">
+    <label for="Nintendo-input"> Add Your Favorite Nintendo Gifs!</label>
+    <input type="text" id="Nintendo-input"><br>
+
+    <!-- Button triggers new Nintendo Gif to be added -->
+    <input id="add-Nintendogif" type="submit" value="Add Your Nintendo Gifs">
+  </form>
+
+  <!--Gifs will be dropped off here -->
+  <div id="Nintendobuttons-view"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    //Initial Array of Nintendo Characters -->
+  var Nintendo = ["Sonic","Link","Mario","Inklings","Donkey Kong","Ice Climbers","Kibry", "Yoshi"];
+  
+  // Nintendogif function re-renders the HTML to display the appropriate content
+  function displayNintendogif(){
+
+    var Nintendogif = $(this).attr("data-name");
+    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=SwUA37Tbfy2urH5FFPDTwo64p36ZGL3H&q=&limit=10&offset=0&rating=PG-13&lang=en";
+   
+    //Creates AJAX call for the specific Nintendogif being clicked
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response){
+      console.log(response);
+      console.log(response.Runtime);
+
+      // Div for content
+      var NintendogifDiv = $("<div>");
+      //Give div Title
+      NintendogifDiv.after("<h2>" + response.Title + "</h2>");
+      // Give rating
+      NintendogifDiv.after("<p>" + response.Rated + "</p>");
+
+      //Create Image
+      var gifImg = $("<img>");
+      // IF I had a predefined class to style it
+      gifImg.addClass("myClassName");
+      // Give image src attribute
+      gifImg.attr("src", response.Title);
+      //Give image alt attribute
+      gifImg.attr("alt", response.Rated)
+      // Add image to div
+      NintendogifDiv.after(gifImg);
+
+      //Add div above previous content in Nintendobuttons-view
+      $("#Nintendobuttons-view").prepend(NintendogifDiv);
+
+    });
+  }
+
+  //Function for displaying data
+  function renderButtons() {
+
+    
+    $("#Nintendobuttons-view").empty();
+
+    //Loops through my array of Nintendo characters
+    for (var i = 0; i < Nintendo.length; i++) {
+      
+      //This will dynamically generate buttons for each character
+      //This code $("<button>") is all jQuery needs to create the beginning and end tag (<button></button>)
+      var a = $("<button>");
+      //Adds a class of Nintendo to our button
+      a.addClass("Nintendo");
+      //Added a data-attribute
+      a.attr("data-name", Nintendo[i]);
+      //Provided the initial button text
+      a.text(Nintendo[i]);
+      //Added the button to the buttons-view div
+      $("#Nintendobuttons-view").after(a);
+    }
+  }
+
+  //This function handles events where the add Nintendo button is
+  $("#add-Nintendogif").on("click", function(event){
+    event.preventDefault();
+    // This line of code will grab the input from our text box
+    var Nintendo = $("#Nintendo-input").val().trim();
+
+    // The Nintendo from the textbox is then added to our array
+    Nintendogif.push(Nintendo);
+
+    // Calling renderbuttons to handle the processing of our character array
+    renderButtons();
+
+  });
+
+
+  //Adding click event listeners to all elements with a class of Nintendo
+  $(document).on("click", ".Nintendo", displayNintendogif);
+
+  // Calling the renderButtons function to display initial buttons
+  renderButtons();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,19 @@
+.body 
+{
+  background-image: kirby.jpg
+  background-repeat:
+  background-position:
+  background-size:
+  font-size:
+  font-family:
+
+}
+
+.NintendoButtons-view {
+background-color: palevioletred;
+border-radius: 5px;
+color: antiquewhite;
+display: inline-block;
+text-decoration: underline overline wavy goldenrod;
+
+}
